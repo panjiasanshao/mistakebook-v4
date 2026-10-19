@@ -1,0 +1,12 @@
+node_modules/
+dist/
+android/
+.env
+.env.*
+!.env.example
+cloudbaserc.json
+*.apk
+*.aab
+*.keystore
+*.jks
+.local/

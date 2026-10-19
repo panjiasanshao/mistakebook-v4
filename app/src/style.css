@@ -1,0 +1,223 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #4f46e5;
+  --primary-dark: #4338ca;
+  --primary-soft: #eef2ff;
+  color: #222;
+  background: #fff;
+  font-family: 'Noto Sans SC', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+/* ========================================
+ * 3D 翻转卡片（F2）
+ * ======================================== */
+.flip-card {
+  perspective: 1000px;
+  min-height: 400px;
+  height: 400px;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.flip-card-inner.flipped {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 0.75rem;
+  transform-style: preserve-3d;
+  overflow: hidden;
+}
+
+.flip-card-front {
+  z-index: 2;
+  transform: rotateY(0deg);
+}
+
+.flip-card-back {
+  transform: rotateY(180deg);
+  z-index: 1;
+}
+
+/* 防穿透：翻转后正面禁用交互，背面启用 */
+.flip-card-inner.flipped .flip-card-front {
+  pointer-events: none !important;
+  z-index: 1 !important;
+  visibility: hidden;
+}
+
+.flip-card-inner.flipped .flip-card-back {
+  pointer-events: auto !important;
+  z-index: 10 !important;
+  visibility: visible;
+}
+
+.flip-card-inner:not(.flipped) .flip-card-back {
+  pointer-events: none !important;
+  visibility: hidden;
+}
+
+.flip-card-inner:not(.flipped) .flip-card-front {
+  pointer-events: auto !important;
+  visibility: visible;
+}
+
+/* ========================================
+ * 卡片瀑布流（CSS Grid 自适应）
+ * ======================================== */
+.card-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ========================================
+ * 自定义滚动条
+ * ======================================== */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 3px;
+}
+
+/* ========================================
+ * F3: A4 双栏打印样式
+ * ======================================== */
+
+/* 打印时隐藏屏幕 UI，仅显示 #printArea */
+.print-only {
+  display: none;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block;
+  }
+  .print-area {
+    display: block;
+  }
+  body {
+    background: white !important;
+  }
+}
+
+/* 试卷抬头 */
+.paper-header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.paper-meta {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 0.5rem;
+  font-size: 14px;
+}
+
+/* 双栏排版（兼容 Firefox 用 page-break-inside） */
+.paper-questions {
+  column-count: 2;
+  column-rule: 1px dashed #94a3b8;
+  column-gap: 1.5rem;
+}
+
+.paper-question {
+  break-inside: avoid;
+  page-break-inside: avoid;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed #cbd5e1;
+}
+
+.paper-question-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 14px;
+}
+
+.paper-img {
+  max-width: 100%;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  margin: 0.25rem 0;
+}
+
+.paper-text {
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* 答题留白区 */
+.paper-answer-area {
+  margin-top: 0.75rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed #94a3b8;
+  min-height: 4rem;
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+/* 文末独立附录页 */
+.paper-appendix {
+  break-before: page;
+  page-break-before: always;
+}
+
+.paper-appendix-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 2px solid #1e293b;
+}
+
+.paper-answer {
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed #cbd5e1;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}

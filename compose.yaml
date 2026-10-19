@@ -1,0 +1,28 @@
+services:
+  app:
+    image: ${AI_CODING_IMAGE}
+    pull_policy: never
+    platform: linux/amd64
+    network_mode: ${AI_CODING_NETWORK_MODE:-pasta}
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+      CHOKIDAR_INTERVAL: "1000"
+      HTTP_PROXY: ""
+      HTTPS_PROXY: ""
+      ALL_PROXY: ""
+      http_proxy: ""
+      https_proxy: ""
+      all_proxy: ""
+    volumes:
+      - ./app:/workspace
+      - node_modules:/workspace/node_modules
+    ports:
+      - "127.0.0.1:${AI_CODING_PORT:-5187}:5187"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:5187/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 5s
+      timeout: ${AI_CODING_HEALTH_TIMEOUT:-10s}
+      start_period: 30s
+      retries: 30
+volumes:
+  node_modules:
